@@ -1,0 +1,22 @@
+{
+  "name": "honzapospi/sql-builder",
+  "description" : "Object oriented SQL builder for PHP.",
+  "license": ["MIT", "GPL-2.0", "GNU-3.0"],
+  "authors": [
+    {
+      "name": "Jan Pospisil",
+      "homepage": "http://jan-pospisil.cz"
+    }
+  ],
+  "autoload": {
+    "classmap": ["src/"]
+  },
+  "require": {
+    "php": ">= 5.3",
+    "nette/database": "~2.3"
+  },
+  "require-dev": {
+    "nette/tester": "~1.6"
+  },
+  "minimum-stability": "dev"
+}
