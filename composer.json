@@ -1,5 +1,5 @@
 {
-  "name": "JP/sql-builder",
+  "name": "honzapospi/sql-builder",
   "description" : "Object oriented SQL builder for PHP.",
   "license": ["MIT", "GPL-2.0", "GNU-3.0"],
   "authors": [

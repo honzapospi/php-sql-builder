@@ -4,7 +4,7 @@
  * Copyright (c) Jan Pospisil (http://www.jan-pospisil.cz)
  */
 
-namespace JP\SqlBuilder;
+namespace SqlBuilder;
 use Nette\Database\Context;
 
 /**
