@@ -18,16 +18,29 @@ class Query extends \Nette\Object {
 	private $where = array();
 	private $from;
 
+	/**
+	 * @param $select
+	 * @return $this
+	 */
 	public function select($select){
 		$this->select[] = $select;
 		return $this;
 	}
 
+	/**
+	 * @param $from
+	 * @return $this
+	 */
 	public function from($from){
 		$this->from = $from;
 		return $this;
 	}
 
+	/**
+	 * @param $table
+	 * @param $on
+	 * @return $this
+	 */
 	public function leftJoin($table, $on){
 		$this->leftJoin[] = array(
 			'table' => $table,
@@ -36,6 +49,10 @@ class Query extends \Nette\Object {
 		return $this;
 	}
 
+	/**
+	 * @param $where
+	 * @return $this
+	 */
 	public function where($where){
 		if(is_array($where)){
 			$this->where[] = $where;
@@ -50,10 +67,17 @@ class Query extends \Nette\Object {
 		return $this;
 	}
 
+	/**
+	 * @param IConnection $context
+	 * @return mixed
+	 */
 	public function execute(IConnection $context){
 		return call_user_func_array(array($context, 'query'), $this->buildQuery());
 	}
 
+	/**
+	 * @return array
+	 */
 	private function buildQuery(){
 		$params = array();
 		$sql[] = 'SELECT '.implode(' ', $this->select);
@@ -77,6 +101,9 @@ class Query extends \Nette\Object {
 		return $return;
 	}
 
+	/**
+	 * @param Query $query
+	 */
 	public function merge(Query $query){
 		foreach($query->select as $select){
 			$this->select($select);
@@ -89,14 +116,23 @@ class Query extends \Nette\Object {
 		}
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getSelect(){
 		return $this->select;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getLeftJoins(){
 		return $this->leftJoin;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getWhere(){
 		return $this->where;
 	}
