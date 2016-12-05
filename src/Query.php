@@ -5,7 +5,6 @@
  */
 
 namespace SqlBuilder;
-use Nette\Database\Context;
 
 /**
  * SqlBuilder
@@ -51,7 +50,7 @@ class Query extends \Nette\Object {
 		return $this;
 	}
 
-	public function execute(Context $context){
+	public function execute(IConnection $context){
 		return call_user_func_array(array($context, 'query'), $this->buildQuery());
 	}
 
