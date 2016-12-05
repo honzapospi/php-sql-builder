@@ -13,10 +13,15 @@ namespace SqlBuilder;
 
 class Query extends \Nette\Object {
 
+	const FETCH = 'fetch';
+	const FETCH_ALL = 'fetchAll';
+
 	private $select = array();
 	private $leftJoin = array();
 	private $where = array();
 	private $from;
+	private $fetchMode;
+	private $fetchParams;
 
 	/**
 	 * @param $select
@@ -67,22 +72,70 @@ class Query extends \Nette\Object {
 		return $this;
 	}
 
-	/**
-	 * @param IConnection $context
-	 * @return mixed
-	 */
-	public function execute(IConnection $connection){
-		return call_user_func_array(array($connection, 'query'), $this->buildQuery());
+	public function fetch(){
+		$this->fetchMode = self::FETCH;
+		return $this;
 	}
 
-	public function fetch(IConnection $connection){
-		return call_user_func_array(array($connection, 'fetch'), $this->buildQuery());
+	public function fetchAll(){
+		return $this->fetchMode = self::FETCH_ALL;
+	}
+
+	/****************************************************** SHORTERS   ************************************************/
+
+	/**
+	 * @param Query $query
+	 */
+	public function merge(Query $query){
+		foreach($query->select as $select){
+			$this->select($select);
+		}
+		foreach($query->leftJoins as $join){
+			$this->leftJoin($join['table'], $join['on']);
+		}
+		foreach($query->where as $where){
+			$this->where($where);
+		}
+	}
+
+	//*************************************************** GETTERS ****************************************************//
+
+	/**
+	 * @return array
+	 */
+	public function getSelect(){
+		return $this->select;
 	}
 
 	/**
 	 * @return array
 	 */
-	private function buildQuery(){
+	public function getLeftJoins(){
+		return $this->leftJoin;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getWhere(){
+		return $this->where;
+	}
+
+	public function getFetch(){
+		if($this->fetchMode){
+			return array(
+				'fetch' => $this->fetchMode,
+				'params' => $this->fetchParams
+			);
+		}
+	}
+
+	//**************************************************** PRIVATE ****************************************************/
+
+	/**
+	 * @return array
+	 */
+	public function buildQuery(){
 		$params = array();
 		$sql[] = 'SELECT '.implode(' ', $this->select);
 		$sql[] = 'FROM '.$this->from;
@@ -105,39 +158,4 @@ class Query extends \Nette\Object {
 		return $return;
 	}
 
-	/**
-	 * @param Query $query
-	 */
-	public function merge(Query $query){
-		foreach($query->select as $select){
-			$this->select($select);
-		}
-		foreach($query->leftJoins as $join){
-			$this->leftJoin($join['table'], $join['on']);
-		}
-		foreach($query->where as $where){
-			$this->where($where);
-		}
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getSelect(){
-		return $this->select;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getLeftJoins(){
-		return $this->leftJoin;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getWhere(){
-		return $this->where;
-	}
 }

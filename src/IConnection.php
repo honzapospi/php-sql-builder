@@ -13,8 +13,6 @@ namespace SqlBuilder;
 
 interface IConnection  {
 	
-	public function query($sql);
-
-	public function fetch($sql);
+	public function execute(Query $query);
 
 }
