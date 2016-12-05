@@ -15,4 +15,6 @@ interface IConnection  {
 	
 	public function query($sql);
 
+	public function fetch($sql);
+
 }

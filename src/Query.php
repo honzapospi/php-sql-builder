@@ -71,8 +71,12 @@ class Query extends \Nette\Object {
 	 * @param IConnection $context
 	 * @return mixed
 	 */
-	public function execute(IConnection $context){
-		return call_user_func_array(array($context, 'query'), $this->buildQuery());
+	public function execute(IConnection $connection){
+		return call_user_func_array(array($connection, 'query'), $this->buildQuery());
+	}
+
+	public function fetch(IConnection $connection){
+		return call_user_func_array(array($connection, 'fetch'), $this->buildQuery());
 	}
 
 	/**
