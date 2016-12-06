@@ -22,6 +22,8 @@ class Query extends \Nette\Object {
 	private $from;
 	private $fetchMode;
 	private $fetchParams = array();
+	private $order;
+	private $limit;
 
 	/**
 	 * @param $select
@@ -79,6 +81,16 @@ class Query extends \Nette\Object {
 
 	public function fetchAll(){
 		return $this->fetchMode = self::FETCH_ALL;
+	}
+
+	public function order($order){
+		$this->order = $order;
+		return $this;
+	}
+
+	public function limit($limit){
+		$this->limit = $limit;
+		return $this;
 	}
 
 	/****************************************************** SHORTERS   ************************************************/
@@ -151,7 +163,10 @@ class Query extends \Nette\Object {
 			$sql[] = 'WHERE';
 			$sql[] = implode(' AND ', $w);
 		}
-
+		if($this->order)
+			$sql[] = 'ORDER BY '.$this->order;
+		if($this->limit)
+			$sql[] = 'LIMIT '.$this->limit;
 		$return = array(implode(' ', $sql));
 		foreach($params as $param)
 			$return[] = $param;
