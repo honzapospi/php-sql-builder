@@ -21,7 +21,7 @@ class Query extends \Nette\Object {
 	private $where = array();
 	private $from;
 	private $fetchMode;
-	private $fetchParams;
+	private $fetchParams = array();
 
 	/**
 	 * @param $select
@@ -124,7 +124,7 @@ class Query extends \Nette\Object {
 	public function getFetch(){
 		if($this->fetchMode){
 			return array(
-				'fetch' => $this->fetchMode,
+				'method' => $this->fetchMode,
 				'params' => $this->fetchParams
 			);
 		}
