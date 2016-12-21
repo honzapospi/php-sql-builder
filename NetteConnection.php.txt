@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * Copyright (c) Jan Pospisil (http://www.jan-pospisil.cz)
+ */
+
+namespace Labels;
+use Nette\Database\Context;
+use SqlBuilder\IConnection;
+use SqlBuilder\Query;
+
+/**
+ * Connection
+ * @author Jan Pospisil
+ */
+
+class Connection extends \Nette\Object implements IConnection  {
+
+	private $context;
+
+	public function __construct(Context $context){
+		$this->context = $context;
+	}
+
+	public function execute(Query $query) {
+		$return = call_user_func_array(array($this->context, 'query'), $query->buildQuery());
+		if($fetch = $query->getFetch())
+			return call_user_func_array(array($return, $fetch['method']), $fetch['params']);
+		return $return;
+	}
+
+}
