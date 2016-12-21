@@ -30,7 +30,7 @@ class Query extends \Nette\Object {
 	 * @return $this
 	 */
 	public function select($select){
-		$this->select[] = $select;
+		$this->select = $select;
 		return $this;
 	}
 
@@ -99,9 +99,7 @@ class Query extends \Nette\Object {
 	 * @param Query $query
 	 */
 	public function merge(Query $query){
-		foreach($query->select as $select){
-			$this->select($select);
-		}
+		$this->select($query->getSelect());
 		foreach($query->leftJoins as $join){
 			$this->leftJoin($join['table'], $join['on']);
 		}
@@ -149,7 +147,10 @@ class Query extends \Nette\Object {
 	 */
 	public function buildQuery(){
 		$params = array();
-		$sql[] = 'SELECT '.implode(' ', $this->select);
+		$select = array();
+		foreach($this->select as $key => $val)
+			$select[] = is_int($key) ? $val : $key.' as '.$val;
+		$sql[] = 'SELECT '.implode(', ', $select);
 		$sql[] = 'FROM '.$this->from;
 		foreach($this->leftJoin as $join){
 			$sql[] = 'LEFT JOIN '.$join['table'].' ON '.$join['on'];
