@@ -4,7 +4,7 @@
  * Copyright (c) Jan Pospisil (http://www.jan-pospisil.cz)
  */
 
-namespace Labels;
+namespace App;
 use Nette\Database\Context;
 use SqlBuilder\IConnection;
 use SqlBuilder\Query;
@@ -28,5 +28,14 @@ class Connection extends \Nette\Object implements IConnection  {
 			return call_user_func_array(array($return, $fetch['method']), $fetch['params']);
 		return $return;
 	}
+
+	public function update($table, $id, $entry){
+		$this->context->table($table)->get($id)->update($entry);
+	}
+
+	public function insert($table, $data){
+		$this->context->table($table)->insert($data);
+	}
+
 
 }
