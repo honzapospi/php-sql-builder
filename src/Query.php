@@ -24,6 +24,8 @@ class Query extends \Nette\Object {
 	private $fetchParams = array();
 	private $order;
 	private $limit;
+	private $offset;
+
 
 	/**
 	 * @param $select
@@ -88,9 +90,17 @@ class Query extends \Nette\Object {
 		return $this;
 	}
 
-	public function limit($limit){
+	public function limit($limit, $offset = null){
 		$this->limit = $limit;
+		$this->offset = $offset;
 		return $this;
+	}
+
+	public function page($page, $itemsPerPage){
+		if($page < 1){
+			$itemsPerPage = 0;
+		}
+		return $this->limit($itemsPerPage, ($page - 1) * $itemsPerPage);
 	}
 
 	/****************************************************** SHORTERS   ************************************************/
@@ -168,6 +178,8 @@ class Query extends \Nette\Object {
 			$sql[] = 'ORDER BY '.$this->order;
 		if($this->limit)
 			$sql[] = 'LIMIT '.$this->limit;
+		if($this->limit && $this->offset)
+			$sql[] = 'OFFSET '.$this->offset;
 		$return = array(implode(' ', $sql));
 		foreach($params as $param)
 			$return[] = $param;
