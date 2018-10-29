@@ -19,7 +19,7 @@
   },
   "require": {
     "php": ">= 7.1",
-    "nette/utils": "~2.3"
+    "nette/utils": "^2.4"
   },
   "minimum-stability": "dev"
 }
