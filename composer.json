@@ -2,9 +2,9 @@
   "name": "honzapospi/sql-builder",
   "description": "Object oriented SQL builder for PHP.",
   "license": [
-    "MIT",
+    "BSD-3-Clause",
     "GPL-2.0",
-    "GNU-3.0"
+    "GPL-3.0"
   ],
   "authors": [
     {
