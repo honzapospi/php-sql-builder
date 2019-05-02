@@ -4,6 +4,8 @@
  * Copyright (c) Jan Pospisil (http://www.jan-pospisil.cz)
  */
 
+declare(strict_types=1);
+
 namespace SqlBuilder;
 use Nette\SmartObject;
 
@@ -18,12 +20,12 @@ class Query {
 	const FETCH = 'fetch';
 	const FETCH_ALL = 'fetchAll';
 
-	private $select = array();
-	private $leftJoin = array();
-	private $where = array();
+	private $select = ['*'];
+	private $leftJoin = [];
+	private $where = [];
 	private $from;
 	private $fetchMode;
-	private $fetchParams = array();
+	private $fetchParams = [];
 	private $order;
 	private $limit;
 	private $offset;
@@ -33,7 +35,7 @@ class Query {
 	 * @param $select
 	 * @return $this
 	 */
-	public function select($select){
+	public function select(array $select): Query {
 		$this->select = $select;
 		return $this;
 	}
@@ -42,7 +44,7 @@ class Query {
 	 * @param $from
 	 * @return $this
 	 */
-	public function from($from){
+	public function from(string $from): Query {
 		$this->from = $from;
 		return $this;
 	}
@@ -52,11 +54,11 @@ class Query {
 	 * @param $on
 	 * @return $this
 	 */
-	public function leftJoin($table, $on){
-		$this->leftJoin[] = array(
+	public function leftJoin(string $table, string $on){
+		$this->leftJoin[] = [
 			'table' => $table,
 			'on' => $on
-		);
+		];
 		return $this;
 	}
 
@@ -64,41 +66,42 @@ class Query {
 	 * @param $where
 	 * @return $this
 	 */
-	public function where($where){
+	public function where($where): Query{
 		if(is_array($where)){
 			$this->where[] = $where;
 			return $this;
 		}
 		$params = func_get_args();
 		array_shift($params);
-		$this->where[] = array(
+		$this->where[] = [
 			'where' => $where,
 			'params' => $params
-		);
+		];
 		return $this;
 	}
 
-	public function fetch(){
+	public function fetch(): Query {
 		$this->fetchMode = self::FETCH;
 		return $this;
 	}
 
-	public function fetchAll(){
-		return $this->fetchMode = self::FETCH_ALL;
+	public function fetchAll(): Query {
+		$this->fetchMode = self::FETCH_ALL;
+		return $this;
 	}
 
-	public function order($order){
+	public function order(string $order): Query {
 		$this->order = $order;
 		return $this;
 	}
 
-	public function limit($limit, $offset = null){
+	public function limit(int $limit, int $offset = null): Query {
 		$this->limit = $limit;
 		$this->offset = $offset;
 		return $this;
 	}
 
-	public function page($page, $itemsPerPage){
+	public function page(int $page, int $itemsPerPage){
 		if($page < 1){
 			$itemsPerPage = 0;
 		}
@@ -145,10 +148,10 @@ class Query {
 
 	public function getFetch(){
 		if($this->fetchMode){
-			return array(
+			return [
 				'method' => $this->fetchMode,
 				'params' => $this->fetchParams
-			);
+			];
 		}
 	}
 
@@ -158,8 +161,8 @@ class Query {
 	 * @return array
 	 */
 	public function buildQuery(){
-		$params = array();
-		$select = array();
+		$params = [];
+		$select = [];
 		foreach($this->select as $key => $val)
 			$select[] = is_int($key) ? $val : $key.' as '.$val;
 		$sql[] = 'SELECT '.implode(', ', $select);
@@ -182,7 +185,7 @@ class Query {
 			$sql[] = 'LIMIT '.$this->limit;
 		if($this->limit && $this->offset)
 			$sql[] = 'OFFSET '.$this->offset;
-		$return = array(implode(' ', $sql));
+		$return = [implode(' ', $sql)];
 		foreach($params as $param)
 			$return[] = $param;
 		return $return;
