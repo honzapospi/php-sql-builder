@@ -11,7 +11,8 @@ namespace SqlBuilder;
  * @author Jan Pospisil
  */
 
-class Query extends \Nette\Object {
+class Query {
+	use Nette\SmartObject;
 
 	const FETCH = 'fetch';
 	const FETCH_ALL = 'fetchAll';

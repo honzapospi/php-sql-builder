@@ -14,7 +14,8 @@ use SqlBuilder\Query;
  * @author Jan Pospisil
  */
 
-class Connection extends \Nette\Object implements IConnection  {
+class Connection implements IConnection  {
+    use Nette\SmartObject;
 
 	private $context;
 
