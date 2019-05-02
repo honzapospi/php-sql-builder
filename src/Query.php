@@ -5,6 +5,7 @@
  */
 
 namespace SqlBuilder;
+use Nette\SmartObject;
 
 /**
  * SqlBuilder
@@ -12,7 +13,7 @@ namespace SqlBuilder;
  */
 
 class Query {
-	use Nette\SmartObject;
+	use SmartObject;
 
 	const FETCH = 'fetch';
 	const FETCH_ALL = 'fetchAll';
